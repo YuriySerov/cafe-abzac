@@ -60,7 +60,7 @@ const About = () => {
               p: 2, // Отступ внутри блока
             }}>
               <img 
-                src="/assets/image.png" 
+                src="/assets/image.avif" 
                 alt="Интерьер кафе" 
                 style={{ 
                   width: '100%', 
@@ -69,7 +69,7 @@ const About = () => {
                 }} 
               />
               <img 
-                src="/assets/image1.png" 
+                src="/assets/image1.avif" 
                 alt="Интерьер кафе" 
                 style={{ 
                   width: '100%', 
@@ -78,7 +78,7 @@ const About = () => {
                 }} 
               />
               <img 
-                src="/assets/image2.png" 
+                src="/assets/image2.avif" 
                 alt="Интерьер кафе" 
                 style={{ 
                   width: '100%', 
