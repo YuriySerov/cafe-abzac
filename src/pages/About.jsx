@@ -4,7 +4,7 @@ import { Box, Typography, Grid, Paper } from '@mui/material';
 const About = () => {
   return (
     <Box sx={{ 
-      backgroundImage: 'url(/assets/background.png)',
+      backgroundImage: 'url(/assets/background.avif)',
       backgroundSize: 'cover',
       backgroundAttachment: 'fixed',
       minHeight: 'calc(100vh - 128px)',
