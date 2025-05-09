@@ -17,7 +17,7 @@ const About = () => {
         overflow: 'hidden',
         borderRadius: '20px',
       }}>
-        <Grid container spacing={2}> {/* Добавляем отступ между колонками */}
+        <Grid container spacing={2}>
           {/* Текстовый блок */}
           <Grid item xs={12} md={6}>
             <Box sx={{ 
@@ -26,13 +26,13 @@ const About = () => {
               height: '100%',
               display: 'flex',
               flexDirection: 'column',
-              gap: 3, // Отступ между параграфами
+              gap: 3,
             }}>
               <Typography variant="h3" gutterBottom>
                 О кафе Абзац
               </Typography>
               
-              <Typography paragraph sx={{ mb: 0 }}> {/* Убираем стандартный margin */}
+              <Typography paragraph sx={{ mb: 0 }}>
                 Кафе Абзац ждет вас с поводом и без него. Приходите к нам после
                 насыщенного рабочего дня поужинать в спокойной атмосфере и
                 пообщаться с друзьями.
@@ -56,12 +56,13 @@ const About = () => {
               display: 'flex', 
               flexDirection: 'column', 
               height: '100%',
-              gap: 2, // Отступ между изображениями
-              p: 2, // Отступ внутри блока
+              gap: 2,
+              p: 2,
             }}>
               <img 
                 src="/assets/image.avif" 
                 alt="Интерьер кафе" 
+                loading="lazy"  // Добавлен lazy loading
                 style={{ 
                   width: '100%', 
                   height: 'auto',
@@ -71,6 +72,7 @@ const About = () => {
               <img 
                 src="/assets/image1.avif" 
                 alt="Интерьер кафе" 
+                loading="lazy"  // Добавлен lazy loading
                 style={{ 
                   width: '100%', 
                   height: 'auto',
@@ -80,6 +82,7 @@ const About = () => {
               <img 
                 src="/assets/image2.avif" 
                 alt="Интерьер кафе" 
+                loading="lazy"  // Добавлен lazy loading
                 style={{ 
                   width: '100%', 
                   height: 'auto',
