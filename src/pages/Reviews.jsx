@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, Grid, Rating, Button, TextField, Paper } from '@mui/material';
+import { Box, Typography, Grid, Rating, Button, TextField, Paper, Alert } from '@mui/material';
 import ReviewCard from '../components/ReviewCard';
 
 const reviews = [
@@ -32,22 +32,61 @@ const Reviews = () => {
     rating: 0
   });
   const [allReviews, setAllReviews] = useState(reviews);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewReview(prev => ({ ...prev, [name]: value }));
+    
+    // Удаление лишних пробелов в реальном времени
+    let processedValue = value;
+    if (name === 'name' || name === 'text') {
+      // Заменяем множественные пробелы на один
+      processedValue = value.replace(/\s+/g, ' ').trimStart();
+      
+      // Если после обработки строка пустая, но пользователь ввел пробел - игнорируем
+      if (processedValue === '' && value === ' ') {
+        return;
+      }
+    }
+    
+    setNewReview(prev => ({ ...prev, [name]: processedValue }));
+    setError('');
+    setSuccess(false);
   };
 
   const handleRatingChange = (event, newValue) => {
     setNewReview(prev => ({ ...prev, rating: newValue }));
+    setError('');
+    setSuccess(false);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (newReview.name && newReview.text && newReview.rating > 0) {
-      setAllReviews(prev => [...prev, newReview]);
-      setNewReview({ name: '', text: '', rating: 0 });
+    
+    // Проверка рейтинга
+    if (newReview.rating === 0) {
+      setError('Пожалуйста, поставьте оценку');
+      return;
     }
+    
+    // Проверка имени
+    if (!newReview.name.trim()) {
+      setError('Пожалуйста, введите ваше имя');
+      return;
+    }
+    
+    // Проверка текста отзыва
+    if (!newReview.text.trim()) {
+      setError('Пожалуйста, напишите отзыв');
+      return;
+    }
+    
+    // Добавление отзыва
+    setAllReviews(prev => [...prev, newReview]);
+    setNewReview({ name: '', text: '', rating: 0 });
+    setSuccess(true);
+    setError('');
   };
 
   return (
@@ -82,6 +121,18 @@ const Reviews = () => {
           Оставьте свой отзыв
         </Typography>
         
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
+        
+        {success && (
+          <Alert severity="success" sx={{ mb: 2 }}>
+            Спасибо за ваш отзыв!
+          </Alert>
+        )}
+        
         <Box component="form" onSubmit={handleSubmit}>
           <TextField
             fullWidth
@@ -92,7 +143,7 @@ const Reviews = () => {
             margin="normal"
             required
             inputProps={{
-              maxLength: 17 // Максимум 17 символов
+              maxLength: 17
             }}
             sx={{ 
               backgroundColor: 'rgba(255, 255, 255, 0.1)', 
@@ -118,7 +169,7 @@ const Reviews = () => {
             rows={4}
             required
             inputProps={{
-              maxLength: 50 // Максимум 17 символов
+              maxLength: 50
             }}
             sx={{ 
               backgroundColor: 'rgba(255, 255, 255, 0.1)', 
@@ -144,6 +195,11 @@ const Reviews = () => {
               precision={1}
               size="large"
             />
+            {newReview.rating === 0 && (
+              <Typography color="error" sx={{ ml: 2 }}>
+                *
+              </Typography>
+            )}
           </Box>
           
           <Button 

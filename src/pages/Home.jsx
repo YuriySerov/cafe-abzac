@@ -6,18 +6,84 @@ import Timer from '../components/Timer';
 import MultiSelect from '../components/MultiSelect';
 
 const Home = () => {
-  const [formData, setFormData] = useState({ name: '', phone: '', comment: '' });
+  const [formData, setFormData] = useState({ 
+    name: '', 
+    phone: '', 
+    comment: '' 
+  });
+  const [errors, setErrors] = useState({
+    name: false,
+    phone: false,
+  });
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
+    
+    // Обработка пробелов для всех полей
+    let processedValue = value;
+    
+    // Удаляем лишние пробелы и пробелы в начале
+    processedValue = value.replace(/\s+/g, ' ').trimStart();
+    
+    // Если после обработки строка пустая, но пользователь ввел пробел - игнорируем
+    if (processedValue === '' && value === ' ') {
+      return;
+    }
+    
     setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: processedValue,
     }));
+    
+    // Сбрасываем ошибку при изменении
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: false }));
+    }
+  };
+
+  const handlePhoneChange = (e) => {
+    const value = e.target.value;
+    
+    // Разрешаем только цифры и знак +
+    let validatedValue = value.replace(/[^0-9+]/g, '');
+    
+    // Проверяем, чтобы + был только в начале
+    if (validatedValue.includes('+') && validatedValue.indexOf('+') !== 0) {
+      return;
+    }
+    
+    // Ограничиваем количество символов
+    if (validatedValue.length <= 17) {
+      setFormData(prev => ({
+        ...prev,
+        phone: validatedValue
+      }));
+      
+      // Сбрасываем ошибку при изменении
+      if (errors.phone) {
+        setErrors(prev => ({ ...prev, phone: false }));
+      }
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {
+      name: !formData.name.trim(),
+      phone: !formData.phone.trim(),
+    };
+    
+    setErrors(newErrors);
+    return !newErrors.name && !newErrors.phone;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+    
     console.log('Отправка данных:', formData);
     setFormData({ name: '', phone: '', comment: '' });
     setSnackbarOpen(true);
@@ -147,9 +213,19 @@ const Home = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                required
-                inputProps={{ maxLength: 17 }}
-                sx={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', borderRadius: 1 }}
+                error={errors.name}
+                helperText={errors.name ? "Пожалуйста, введите ваше имя" : ""}
+                inputProps={{ 
+                  maxLength: 17,
+                }}
+                sx={{ 
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)', 
+                  borderRadius: 1,
+                  '& .MuiFormHelperText-root': {
+                    position: 'absolute',
+                    bottom: -20,
+                  }
+                }}
               />
 
               <TextField
@@ -157,20 +233,36 @@ const Home = () => {
                 placeholder="Ваш телефон"
                 name="phone"
                 value={formData.phone}
-                onChange={handleChange}
-                required
-                inputProps={{ maxLength: 17 }}
-                sx={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', borderRadius: 1 }}
+                onChange={handlePhoneChange}
+                error={errors.phone}
+                helperText={errors.phone ? "Пожалуйста, введите ваш телефон" : ""}
+                inputProps={{ 
+                  maxLength: 17,
+                  inputMode: 'tel'
+                }}
+                sx={{ 
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)', 
+                  borderRadius: 1,
+                  '& .MuiFormHelperText-root': {
+                    position: 'absolute',
+                    bottom: -20,
+                  }
+                }}
               />
 
               <TextField
                 fullWidth
-                placeholder="Комментарий"
+                placeholder="Комментарий (необязательно)"
                 name="comment"
                 value={formData.comment}
                 onChange={handleChange}
-                inputProps={{ maxLength: 25 }}
-                sx={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', borderRadius: 1 }}
+                inputProps={{ 
+                  maxLength: 25,
+                }}
+                sx={{ 
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)', 
+                  borderRadius: 1,
+                }}
               />
 
               <Button

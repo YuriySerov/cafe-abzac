@@ -39,6 +39,7 @@ const ScrollToTop = () => {
         },
         width: '50px',
         height: '50px',
+        zIndex: 9999,
       }}
     >
       <KeyboardArrowUpIcon fontSize="large" />

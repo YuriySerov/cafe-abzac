@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Grid, Button, Card, CardContent, CardMedia } from '@mui/material';
+import { Box, Typography, Grid} from '@mui/material';
 import MenuItem from '../components/MenuItem';
 
 const drinkCategories = [
@@ -78,7 +78,10 @@ const Menu = () => {
         {items.map((item, index) => (
           <Grid item key={index} xs={12} sm={6} md={4} sx={{
             display: 'flex',
-            maxWidth: '350px' // Фиксированная максимальная ширина
+            maxWidth: '350px', // Фиксированная максимальная ширина
+            height: '400px', // Фиксированная высота для всех карточек
+            width: '400px' // Фиксированная высота для всех карточек
+
           }}>
             <MenuItem item={item} />
           </Grid>

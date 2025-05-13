@@ -7,7 +7,8 @@ import {
   Checkbox, 
   ListItemText,
   Button,
-  Paper
+  Paper,
+  Divider
 } from '@mui/material';
 
 const MultiSelect = () => {
@@ -35,6 +36,14 @@ const MultiSelect = () => {
     setSelected(newSelected);
   };
 
+  const handleSelectAll = () => {
+    if (selected.length === options.length) {
+      setSelected([]);
+    } else {
+      setSelected([...options]);
+    }
+  };
+
   const handleSubmit = () => {
     alert(`Вы выбрали: ${selected.join(', ')}`);
   };
@@ -44,6 +53,18 @@ const MultiSelect = () => {
       <Typography variant="h6" gutterBottom>
         Выберите напитки:
       </Typography>
+      
+      <Button 
+        variant="outlined"
+        size="small"
+        onClick={handleSelectAll}
+        sx={{ mb: 2 }}
+      >
+        {selected.length === options.length ? 'Снять все' : 'Выбрать все'}
+      </Button>
+      
+      <Divider sx={{ mb: 2 }} />
+      
       <List sx={{ maxHeight: '300px', overflow: 'auto' }}>
         {options.map((item) => (
           <ListItem 
@@ -62,13 +83,15 @@ const MultiSelect = () => {
           </ListItem>
         ))}
       </List>
+      
       <Button 
         variant="contained" 
         onClick={handleSubmit}
         sx={{ mt: 2 }}
         disabled={selected.length === 0}
+        fullWidth
       >
-        Подтвердить выбор
+        Подтвердить выбор ({selected.length})
       </Button>
     </Paper>
   );

@@ -5,7 +5,7 @@ const MenuItem = ({ item }) => {
   return (
     <Card sx={{
       width: '100%',
-      height: 'auto',
+      height: '100%', // Занимаем всю высоту родителя
       display: 'flex',
       flexDirection: 'column',
       borderRadius: '12px',
@@ -20,7 +20,7 @@ const MenuItem = ({ item }) => {
         }
       }
     }}>
-      {/* Контейнер для изображения с overflow: hidden */}
+      {/* Фиксированная высота для изображения */}
       <Box sx={{
         width: '100%',
         height: '200px',
@@ -48,6 +48,8 @@ const MenuItem = ({ item }) => {
         display: 'flex',
         flexDirection: 'column',
         p: 2,
+        height: '150px', // Фиксированная высота для контента
+        boxSizing: 'border-box' // Учитываем padding в высоте
       }}>
         <Typography 
           variant="subtitle1" 
@@ -58,7 +60,13 @@ const MenuItem = ({ item }) => {
             transition: 'color 0.3s ease',
             '&:hover': {
               color: 'primary.main'
-            }
+            },
+            flex: '1 1 auto', // Занимаем все доступное пространство
+            overflow: 'hidden', // Скрываем лишний текст
+            textOverflow: 'ellipsis', // Добавляем многоточие
+            display: '-webkit-box',
+            WebkitLineClamp: 3, // Ограничиваем количество строк
+            WebkitBoxOrient: 'vertical'
           }}
         >
           {item.name}
@@ -67,10 +75,10 @@ const MenuItem = ({ item }) => {
         <Typography 
           variant="body1" 
           sx={{
-            mt: 'auto',
             fontWeight: 700,
             color: 'primary.main',
-            fontSize: '1.1rem'
+            fontSize: '1.1rem',
+            mt: 'auto' // Прижимаем цену к низу
           }}
         >
           {item.price}
