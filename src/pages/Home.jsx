@@ -18,11 +18,24 @@ const Home = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+  const { name, value } = e.target;
+  
+  let processedValue = value;
+  
+  // Специальная обработка для поля 'name'
+  if (name === 'name') {
+    // 1. Удаляем все символы, кроме букв, пробелов и дефисов
+    processedValue = value.replace(/[^a-zA-Zа-яА-Я\s-]/g, '');
+    // 2. Заменяем множественные пробелы/дефисы на один
+    processedValue = processedValue.replace(/\s+/g, ' ').replace(/-+/g, '-').trimStart();
     
-    // Обработка пробелов для всех полей
-    let processedValue = value;
-    
+    // Если после обработки строка пустая, но пользователь ввел неразрешенный символ - игнорируем
+    if (processedValue === '' && value !== '') {
+      return;
+    }
+  } 
+  // Обычная обработка для остальных полей
+  else {
     // Удаляем лишние пробелы и пробелы в начале
     processedValue = value.replace(/\s+/g, ' ').trimStart();
     
@@ -30,17 +43,18 @@ const Home = () => {
     if (processedValue === '' && value === ' ') {
       return;
     }
-    
-    setFormData(prev => ({
-      ...prev,
-      [name]: processedValue,
-    }));
-    
-    // Сбрасываем ошибку при изменении
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: false }));
-    }
-  };
+  }
+  
+  setFormData(prev => ({
+    ...prev,
+    [name]: processedValue,
+  }));
+  
+  // Сбрасываем ошибку при изменении
+  if (errors[name]) {
+    setErrors(prev => ({ ...prev, [name]: false }));
+  }
+};
 
   const handlePhoneChange = (e) => {
     const value = e.target.value;

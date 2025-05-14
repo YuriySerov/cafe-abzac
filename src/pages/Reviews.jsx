@@ -35,25 +35,30 @@ const Reviews = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+const handleInputChange = (e) => {
+  const { name, value } = e.target;
+  
+  let processedValue = value;
+  
+  if (name === 'name') {
+    // Удаляем все символы, кроме букв, пробелов и дефисов
+    processedValue = value.replace(/[^a-zA-Zа-яА-Я\s-]/g, '');
+    // Заменяем множественные пробелы/дефисы на один
+    processedValue = processedValue.replace(/\s+/g, ' ').replace(/-+/g, '-').trimStart();
     
-    // Удаление лишних пробелов в реальном времени
-    let processedValue = value;
-    if (name === 'name' || name === 'text') {
-      // Заменяем множественные пробелы на один
-      processedValue = value.replace(/\s+/g, ' ').trimStart();
-      
-      // Если после обработки строка пустая, но пользователь ввел пробел - игнорируем
-      if (processedValue === '' && value === ' ') {
-        return;
-      }
+    // Если после обработки строка пустая, но пользователь ввел неразрешенный символ - игнорируем
+    if (processedValue === '' && value !== '') {
+      return;
     }
-    
-    setNewReview(prev => ({ ...prev, [name]: processedValue }));
-    setError('');
-    setSuccess(false);
-  };
+  } else if (name === 'text') {
+    // Обработка текста отзыва (оставляем как было)
+    processedValue = value.replace(/\s+/g, ' ').trimStart();
+  }
+  
+  setNewReview(prev => ({ ...prev, [name]: processedValue }));
+  setError('');
+  setSuccess(false);
+};
 
   const handleRatingChange = (event, newValue) => {
     setNewReview(prev => ({ ...prev, rating: newValue }));
